@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 @Service
 public class UrlShorteningService {
@@ -56,4 +57,8 @@ public class UrlShorteningService {
             throw new RuntimeException("Unable to generate unique identifier", e);
         }
     }
+
+    public List<UrlMapping> getAllUrlMappings() {
+    return urlMappingRepository.findAll();
+}
 }
