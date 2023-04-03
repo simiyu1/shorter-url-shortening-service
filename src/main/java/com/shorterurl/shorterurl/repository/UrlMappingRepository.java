@@ -1,4 +1,6 @@
 package com.shorterurl.shorterurl.repository;
+
+
 import com.shorterurl.shorterurl.model.UrlMapping;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

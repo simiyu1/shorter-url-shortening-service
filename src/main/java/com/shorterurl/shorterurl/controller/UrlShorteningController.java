@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -30,13 +32,14 @@ public class UrlShorteningController {
     private CustomShortUrlService customShortUrlService;
 
     @PostMapping("/shorten")
-    public ResponseEntity<UrlMapping> createShortUrl(@RequestParam("longUrl") String longUrl,
-                                                      @RequestParam(value = "customAlias", required = false) String customAlias,
+    public ResponseEntity<UrlMapping> createShortUrl(@RequestBody Map<String, String> body,
                                                       @RequestHeader(value = "Authorization") String authorizationToken) {
         if (!authenticationService.isAuthorized(authorizationToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
+        String longUrl = body.get("longUrl");
+        String customAlias = body.get("customAlias");
         UrlMapping urlMapping;
         if (customAlias != null) {
             urlMapping = customShortUrlService.reserveCustomShortUrl(longUrl, customAlias);
@@ -63,5 +66,15 @@ public class UrlShorteningController {
         } else {
             response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    @GetMapping("/urls")
+    public ResponseEntity<List<UrlMapping>> getAllUrls(@RequestHeader(value = "Authorization") String authorizationToken){
+        if (!authenticationService.isAuthorized(authorizationToken)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    
+        List<UrlMapping> urlMappings = urlShorteningService.getAllUrlMappings();
+        return new ResponseEntity<>(urlMappings, HttpStatus.OK);
     }
 }
