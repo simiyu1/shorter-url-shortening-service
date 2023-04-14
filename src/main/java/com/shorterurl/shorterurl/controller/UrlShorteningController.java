@@ -32,14 +32,15 @@ public class UrlShorteningController {
     private CustomShortUrlService customShortUrlService;
 
     @PostMapping("/shorten")
-    public ResponseEntity<UrlMapping> createShortUrl(@RequestBody Map<String, String> body,
+    public ResponseEntity<UrlMapping> createShortUrl(
+        @RequestBody Map<String, String> body,
+        @RequestParam(value = "customAlias", required = false) String customAlias,
                                                       @RequestHeader(value = "Authorization") String authorizationToken) {
         if (!authenticationService.isAuthorized(authorizationToken)) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-
         String longUrl = body.get("longUrl");
-        String customAlias = body.get("customAlias");
+
         UrlMapping urlMapping;
         if (customAlias != null) {
             urlMapping = customShortUrlService.reserveCustomShortUrl(longUrl, customAlias);
