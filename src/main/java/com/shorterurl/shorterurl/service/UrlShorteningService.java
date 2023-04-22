@@ -41,7 +41,7 @@ public class UrlShorteningService {
 
     private String generateShortUrl(String longUrl) {
         String uniqueId = getUniqueId(longUrl);
-        return shortUrlDomain + uniqueId;
+        return uniqueId;
     }
 
     private String getUniqueId(String longUrl) {
