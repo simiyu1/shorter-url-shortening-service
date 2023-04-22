@@ -65,12 +65,17 @@ public class UrlShorteningController {
         }
     }
 
-    @GetMapping("/urls")
-    public ResponseEntity<List<UrlMapping>> getAllUrls(@RequestHeader(value = "Authorization") String authorizationToken){
-        if (!authenticationService.isAuthorized(authorizationToken)) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+    // @GetMapping("/urls")
+    // public ResponseEntity<List<UrlMapping>> getAllUrls(@RequestHeader(value = "Authorization") String authorizationToken){
+    //     if (!authenticationService.isAuthorized(authorizationToken)) {
+    //         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    //     }
     
+    //     List<UrlMapping> urlMappings = urlShorteningService.getAllUrlMappings();
+    //     return new ResponseEntity<>(urlMappings, HttpStatus.OK);
+    // }
+    @GetMapping("/urls")
+    public ResponseEntity<List<UrlMapping>> getAllUrls() {
         List<UrlMapping> urlMappings = urlShorteningService.getAllUrlMappings();
         return new ResponseEntity<>(urlMappings, HttpStatus.OK);
     }
