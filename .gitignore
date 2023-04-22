@@ -34,3 +34,4 @@ build/
 .vscode/
 application.properties
 shorter-ec2.pem
+shorterv2.pem
