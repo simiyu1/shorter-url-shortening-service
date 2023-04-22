@@ -31,6 +31,16 @@ public class UrlShorteningController {
     @Autowired
     private CustomShortUrlService customShortUrlService;
 
+    public void setUrlShorteningService(UrlShorteningService urlShorteningService) {
+        this.urlShorteningService = urlShorteningService;
+    }
+    public void setAuthenticationService(AuthenticationService authenticationService) {
+        this.authenticationService = authenticationService;
+    }
+    public void setCustomShortUrlService(CustomShortUrlService customShortUrlService) {
+        this.customShortUrlService = customShortUrlService;
+    }
+
     @PostMapping("/shorten")
     public ResponseEntity<UrlMapping> createShortUrl(
         @RequestBody Map<String, String> body) {
