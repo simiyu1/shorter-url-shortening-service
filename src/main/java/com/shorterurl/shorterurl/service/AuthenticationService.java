@@ -21,4 +21,14 @@ public class AuthenticationService {
         String providedApiKey = tokenParts[1];
         return apiKey.equals(providedApiKey);
     }
+
+    public String getUserId(String authorizationToken) {
+        if (!isAuthorized(authorizationToken)) {
+            return null;
+        }
+
+        String[] tokenParts = authorizationToken.split(" ");
+        String providedApiKey = tokenParts[1];
+        return providedApiKey.split(":")[0];
+    }
 }
