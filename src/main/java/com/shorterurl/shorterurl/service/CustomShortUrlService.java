@@ -2,6 +2,9 @@ package com.shorterurl.shorterurl.service;
 
 import com.shorterurl.shorterurl.model.UrlMapping;
 import com.shorterurl.shorterurl.repository.UrlMappingRepository;
+
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +16,7 @@ public class CustomShortUrlService {
     @Autowired
     private UrlShorteningService urlShorteningService;
 
-    public UrlMapping reserveCustomShortUrl(String longUrl, String customAlias) {
+    public UrlMapping reserveCustomShortUrl(String longUrl, String customAlias, String ipAddress, String userId) {
         // Check if custom alias is already reserved
         UrlMapping existingUrlMapping = urlMappingRepository.findByShortUrl(customAlias);
         if (existingUrlMapping != null) {
@@ -22,6 +25,10 @@ public class CustomShortUrlService {
 
         // Create a new UrlMapping with the custom short URL
         UrlMapping urlMapping = new UrlMapping(longUrl, customAlias);
+        urlMapping.setIpAddress(ipAddress);
+        urlMapping.setUserId(userId);
+        LocalDateTime expiration = LocalDateTime.now().plusHours(48);
+        urlMapping.setExpiration(expiration);
         return urlMappingRepository.save(urlMapping);
     }
 }
