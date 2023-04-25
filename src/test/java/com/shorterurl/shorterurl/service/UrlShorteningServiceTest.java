@@ -9,9 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.List;
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -34,11 +31,13 @@ public class UrlShorteningServiceTest {
     public void testCreateShortUrl_existingUrlMapping() {
         String longUrl = "http://longurlexample.com";
         String shortUrl = "http://api.ntoya.link/abcdef";
+        String ipAddress = "172.0.0.1";
+        String userId = "2b0803c1f5787acd7e4724";
 
         UrlMapping existingUrlMapping = new UrlMapping(longUrl, shortUrl);
         when(urlMappingRepository.findByLongUrl(longUrl)).thenReturn(existingUrlMapping);
 
-        UrlMapping result = urlShorteningService.createShortUrl(longUrl);
+        UrlMapping result = urlShorteningService.createShortUrl(longUrl, ipAddress, userId);
 
         assertEquals(existingUrlMapping, result);
         verify(urlMappingRepository, times(1)).findByLongUrl(longUrl);
@@ -49,6 +48,8 @@ public class UrlShorteningServiceTest {
     public void testCreateShortUrl_newUrlMapping() {
         String longUrl = "http://longurlexample.com";
         String shortUrl = "http://api.ntoya.link/abcdef";
+        String ipAddress = "172.0.0.1";
+        String userId = "2b0803c1f5787acd7e4724";
 
         when(urlMappingRepository.findByLongUrl(longUrl)).thenReturn(null);
         when(urlMappingRepository.save(any(UrlMapping.class))).thenAnswer(invocation -> {
@@ -57,7 +58,7 @@ public class UrlShorteningServiceTest {
             return urlMapping;
         });
 
-        UrlMapping result = urlShorteningService.createShortUrl(longUrl);
+        UrlMapping result = urlShorteningService.createShortUrl(longUrl, ipAddress, userId);
 
         assertNotNull(result);
         assertEquals(longUrl, result.getLongUrl());
@@ -70,6 +71,8 @@ public class UrlShorteningServiceTest {
     public void testGetLongUrl() {
         String longUrl = "http://longurlexample.com";
         String shortUrl = "http://api.ntoya.link/abcdef";
+        String ipAddress = "172.0.0.1";
+        String userId = "2b0803c1f5787acd7e4724";
 
         UrlMapping urlMapping = new UrlMapping(longUrl, shortUrl);
         when(urlMappingRepository.findByShortUrl(shortUrl)).thenReturn(urlMapping);

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,7 +21,8 @@ public class UrlShorteningService {
     @Value("${app.short-url-domain}")
     private String shortUrlDomain;
 
-    public UrlMapping createShortUrl(String longUrl) {
+
+    public UrlMapping createShortUrl(String longUrl, String ipAddress, String userId) {
         // Check if the long URL already exists in the repository
         UrlMapping existingUrlMapping = urlMappingRepository.findByLongUrl(longUrl);
         if (existingUrlMapping != null) {
@@ -32,6 +34,10 @@ public class UrlShorteningService {
 
         // Create a new UrlMapping with the short URL
         UrlMapping urlMapping = new UrlMapping(longUrl, shortUrl);
+        urlMapping.setIpAddress(ipAddress);
+        urlMapping.setUserId(userId);
+        LocalDateTime expiration = LocalDateTime.now().plusHours(48);
+        urlMapping.setExpiration(expiration);
         return urlMappingRepository.save(urlMapping);
     }
 
@@ -59,6 +65,10 @@ public class UrlShorteningService {
     }
 
     public List<UrlMapping> getAllUrlMappings() {
-    return urlMappingRepository.findAll();
-}
+        return urlMappingRepository.findAll();
+    }
+
+    public UrlMapping saveUrlMapping(UrlMapping urlMapping) {
+        return urlMappingRepository.save(urlMapping);
+    }
 }
