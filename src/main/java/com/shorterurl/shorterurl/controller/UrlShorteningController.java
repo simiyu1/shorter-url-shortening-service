@@ -26,32 +26,18 @@ import java.util.Map;
 @RequestMapping("/api")
 public class UrlShorteningController {
 
-    @Autowired
-    private UrlShorteningService urlShorteningService;
+    private final UrlShorteningService urlShorteningService;
+    private final AuthenticationService authenticationService;
+    private final CustomShortUrlService customShortUrlService;
+    private final ClickService clickService;
 
-    @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private CustomShortUrlService customShortUrlService;
-
-    @Autowired
-    private ClickService clickService;
-    
-
-    // @Autowired
-    // private LocationService locationService;
-
-    public void setUrlShorteningService(UrlShorteningService urlShorteningService) {
+    public UrlShorteningController(UrlShorteningService urlShorteningService,
+                                   AuthenticationService authenticationService,
+                                   CustomShortUrlService customShortUrlService,
+                                   ClickService clickService) {
         this.urlShorteningService = urlShorteningService;
-    }
-    public void setAuthenticationService(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
-    }
-    public void setCustomShortUrlService(CustomShortUrlService customShortUrlService) {
         this.customShortUrlService = customShortUrlService;
-    }
-    public void setClickService(ClickService clickService) {
         this.clickService = clickService;
     }
 
